@@ -1,4 +1,4 @@
-%expect 0
+ %expect 0
 
 %define api.parser.struct {Parser}
 %define api.value.type {Value}
