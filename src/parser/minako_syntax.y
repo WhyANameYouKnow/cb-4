@@ -56,11 +56,234 @@
 
 %%
 
-program:
-	// empty
-	{
-            $$ = Value::None;
-        }
+program             ::= ( declassignment ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| functiondefinition ) program
+			{
+                        	$$ = Value::None;
+                        }
+			| %empty
+                        {
+                        	$$ = Value::None;
+                        }
+functiondefinition  ::= type id "(" parameterlist ")" "{" statementlist "}"
+			{
+                        	$$ = Value::None;
+                        }
+			| type id "(" ")" "{" statementlist "}";
+			{
+                         	$$ = Value::None;
+                        }
+parameterlist       ::= type id  "," parameterlist
+			{
+                        	$$ = Value::None;
+                        }
+			| type id;
+			{
+                        	$$ = Value::None;
+                        }
+functioncall        ::= id "(" assignment assignmentincrease ")"
+			{
+                        	$$ = Value::None;
+                        }
+			| id "(" assignment ( "," assignment )* ")"
+			{
+                        	$$ = Value::None;
+                        }
+			| id "(" ")";
+			{
+                        	$$ = Value::None;
+                        }
+assignmentincrease  ::= "," assignment assignmentincrease
+			{
+                        	$$ = Value::None;
+                        }
+			| %empty
+			{
+                       		$$ = Value::None;
+                        }
+statementlist       ::= block statementlist
+			{
+                		$$ = Value::None;
+                        }
+			| %empty
+			{
+                        	$$ = Value::None;
+                        }
+block               ::= "{" statementlist "}"
+			{
+                        	$$ = Value::None;
+                        }
+			| statement;
+			{
+                        	$$ = Value::None;
+                        }
+statement           ::= ifstatement
+			{
+               		  	$$ = Value::None;
+                        }
+			| forstatement
+			{
+                        	$$ = Value::None;
+                        }
+			| whilestatement
+			{
+                        	$$ = Value::None;
+                        }
+			| returnstatement ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| dowhilestatement ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| printf ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| declassignment ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| statassignment ";"
+			{
+                        	$$ = Value::None;
+                        }
+			| functioncall ";";
+			{
+                        	$$ = Value::None;
+                        }
+statblock           ::= "{" statementlist "}"
+			{
+                        	$$ = Value::None;
+                        }
+			| statement;
+			{
+                        	$$ = Value::None;
+                        }
+ifstatement         ::= KW_IF "(" assignment ")" statblock ( KW_ELSE statblock )
+			{
+                        	$$ = Value::None;
+                        }
+			| KW_IF "(" assignment ")" statblock;
+			{
+                        	$$ = Value::None;
+                        }
+forstatement        ::= KW_FOR "(" ( statassignment | declassignment ) ";" expr ";" statassignment ")" statblock
+			{
+                        	$$ = Value::None;
+                        }
+dowhilestatement    ::= KW_DO statblock KW_WHILE "(" assignment ")";
+			{
+                        	$$ = Value::None;
+                        }
+whilestatement      ::= KW_WHILE "(" assignment ")" statblock;
+			{
+                        	$$ = Value::None;
+                        }
+returnstatement     ::= KW_RETURN ( assignment )
+			{
+                        	$$ = Value::None;
+                        }
+			| KW_RETURN;
+			{
+                                                	$$ = Value::None;
+                                                }
+printf              ::= KW_PRINTF "(" (assignment | CONST_STRING) ")";
+			{
+                        	$$ = Value::None;
+                        }
+declassignment      ::= type id ( "=" assignment )
+			{
+                        	$$ = Value::None;
+                        }
+			| type id;
+			{
+                        	$$ = Value::None;
+                        }
+statassignment      ::= id "=" assignment;
+			{
+                        	 $$ = Value::None;
+                        }
+assignment          ::= id "=" assignment
+			{
+                        	$$ = Value::None;
+                        }
+			| expr;
+			{
+                       		$$ = Value::None;
+                        }
+expr                ::= simpexpr ( "==" simpexpr | "!=" simpexpr | "<=" simpexpr | ">=" simpexpr | "<" simpexpr | ">" simpexpr )
+			{
+                        	$$ = Value::None;
+                        }
+			| simpexpr;
+			{
+                        	$$ = Value::None;
+                        }
+simpexpr            ::= ( "-" term | term ) simpexprinc;
+			{
+                        	$$ = Value::None;
+                        }
+simpexprinc	    ::= ( "+" term | "-" term | "||" term ) (simpexprinc | %empty)
+			{
+                        	$$ = Value::None;
+                        }
+term                ::= factor ( "*" | "/" | "&&") term
+			{
+                        	$$ = Value::None;
+                        }
+			| factor;
+			{
+                        	$$ = Value::None;
+                        }
+factor              ::= CONST_INT
+			{
+                        	$$ = Value::None;
+                        }
+                      | CONST_FLOAT
+			{
+                        	$$ = Value::None;
+                        }
+                      | CONST_BOOLEAN
+			{
+                        	$$ = Value::None;
+                        }
+                      | functioncall
+			{
+                        	$$ = Value::None;
+                        }
+                      | id
+			{
+                        	$$ = Value::None;
+                        }
+                      | "(" assignment ")";
+			{
+                        	$$ = Value::None;
+                        }
+type                ::= KW_BOOLEAN
+			{
+                        	$$ = Value::None;
+                        }
+                      | KW_FLOAT
+			{
+                        	$$ = Value::None;
+                        }
+                      | KW_INT
+			{
+                        	$$ = Value::None;
+                        }
+                      | KW_VOID
+			{
+                        	$$ = Value::None;
+                        }
+id                  ::= ID
+			{
+                        	$$ = Value::None;
+                        }
 
 
 %%
